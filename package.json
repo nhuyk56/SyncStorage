@@ -1,0 +1,22 @@
+{
+  "name": "syncstorage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nhuyk56/SyncStorage.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nhuyk56/SyncStorage/issues"
+  },
+  "homepage": "https://github.com/nhuyk56/SyncStorage#readme",
+  "dependencies": {
+    "shelljs": "^0.8.4"
+  }
+}
