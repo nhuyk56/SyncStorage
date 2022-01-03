@@ -2,6 +2,7 @@ eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/nhuyk56
 ssh -T git@github.com
 git checkout main
+git checkout $2
 git checkout -b $2
 echo '------------------------------'
 git status
