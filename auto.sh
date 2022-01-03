@@ -1,17 +1,17 @@
-# eval "$(ssh-agent -s)"
-# if [ -d D:/YOUTUBE-NNT/$1 ] 
-# then
-  eval "$(ssh-agent -s)"
-  ssh-add ~/.ssh/nhuyk56
-  ssh -T git@github.com
-  git.exe status
-  git.exe checkout main
-#   git checkout -b $1
-#   cp -r D:/YOUTUBE-NNT/$1 $1
-#   git add $1
-#   git commit -m $1
-#   git push -u origin $1
-#   git checkout main
-# else
-# fi
-# read -p "Pause Time 5 seconds"
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/nhuyk56
+ssh -T git@github.com
+git checkout main
+git checkout -b $2
+echo '------------------------------'
+git status
+echo '------------------------------'
+cp -r $1 $2
+git add $2
+git commit -m $2
+git push -u origin $2
+echo '------------------------------'
+git status
+echo '------------------------------'
+git checkout main
+read -p "Pause Time 5 seconds"
