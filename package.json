@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/nhuyk56/SyncStorage#readme",
   "dependencies": {
+    "md5": "^2.3.0",
     "shelljs": "^0.8.4"
   }
 }

@@ -1,16 +1,20 @@
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/nhuyk56
-ssh -T git@github.com
+# eval "$(ssh-agent -s)"
+# ssh-add ~/.ssh/nhuyk56
+# ssh -T git@github.com
 git checkout main
-git checkout $2
-git checkout -b $2
+git checkout $1
+git checkout -b $1
 echo '------------------------------'
 git status
 echo '------------------------------'
-cp -r $1 $2
-git add $2
-git commit -m $2
-git push -u origin $2
+# cp -r $1 $1
+# $1 path local
+# $1 slugFileName.xyz
+# /slugFileName.xyz/slugFileName.xyz
+cp $2 $3
+git add $3
+git commit -m $3
+git push -u origin $1
 echo '------------------------------'
 git status
 echo '------------------------------'
