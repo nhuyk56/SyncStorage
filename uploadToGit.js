@@ -8,8 +8,13 @@ const uploadToGit= (pathFileName, slugFileName) => {
   // const slugFileName = '107727-tap-26-chuong-598---chuong-624'
   const brandFileName = md5(slugFileName)
 
-  var res = { status: ['init'], code: false }
-  const setStatus = (bool, step) => res.status.push(`${bool ? 'success' : 'failed'} ${step}`)
+  var res = { status: {}, code: false }
+  const setStatus = (bool, step) => {
+    if (!Array.isArray(res.status[step])) {
+      res.status[step] = []
+    }
+    res.status[step].push(bool)
+  }
   if (!fs.existsSync(pathFileName)) {
     setStatus(false, '[NOT EXIST] ${pathFileName}')
     return res
