@@ -29,8 +29,12 @@ const uploadToGit= (pathFileName, slugFileName) => {
     setStatus(isCurrentCorrectBrand, 'isCurrentCorrectBrand')
     const isCopy = isCurrentCorrectBrand && shell.cp('-r', pathFileName, slugFileName).code === 0
     setStatus(isCopy, 'isCopy')
-    const isGitAdd = isCopy && shell.exec(`git add ./${slugFileName}`, shellOption).code === 0
+
+    const gitAddObject = isCopy && shell.exec(`git add ./${slugFileName}`, shellOption)
+    const gitAddBlank = gitAddObject.code === 0 && gitAddObject.stdout === ''
+    isGitAdd = gitAddObject.code === 0
     setStatus(isGitAdd, 'isGitAdd')
+
     const isGitCommit = isGitAdd && shell.exec(`git commit -m ${slugFileName}`, shellOption).code === 0
     setStatus(isGitCommit, 'isGitCommit')
     const isGitPush = isGitCommit && shell.exec(`eval "$(ssh-agent -s)"
@@ -40,7 +44,7 @@ const uploadToGit= (pathFileName, slugFileName) => {
                         echo 'pushpushpushpushpushpush'
                         `, shellOption).code === 0
     setStatus(isGitPush, 'isGitPush')
-    isCurrentCorrectBrand = isGitPush && shell.exec('git status', shellOption).stdout.includes(`On branch ${brandFileName}`)
+    isCurrentCorrectBrand = (isGitPush || gitAddBlank) && shell.exec('git status', shellOption).stdout.includes(`On branch ${brandFileName}`)
     setStatus(isCurrentCorrectBrand, 'isCurrentCorrectBrand')
     isCurrentCorrectBrand = isCurrentCorrectBrand && shell.exec('git checkout main', shellOption).code === 0
     setStatus(isCurrentCorrectBrand, 'isCurrentCorrectBrand')
