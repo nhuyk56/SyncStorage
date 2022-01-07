@@ -3,7 +3,7 @@ const uploadToGit= (pathFileName, slugFileName) => {
   var shell = require('shelljs');
   var md5 = require('md5');
 
-  const shellOption = { shell: 'sh.exe', windowsHide: true, silent: true }
+  const shellOption = { shell: 'C:/Program Files/Git/bin/sh.exe', windowsHide: true, silent: true }
   // const pathFileName = 'D:/YOUTUBE-NNT/0YOUUTBE-bat-dau-ban-thuong-bay-cai-the-nhan-vat/107727-tap-26-chuong-598---chuong-624.ps1'
   // const slugFileName = '107727-tap-26-chuong-598---chuong-624'
   const brandFileName = md5(slugFileName)
