@@ -1,9 +1,12 @@
-const uploadToGit= (pathFileName, slugFileName) => {
+const uploadToGit= ({ envFolder, gitSource, pathFileName, slugFileName }) => {
+  var gitPath = gitSource.replace('.git', '')
+  var gitFolder = gitPath.split('/').pop()
   var fs = require('fs');
+  var path = require('path');
   var shell = require('shelljs');
   var md5 = require('md5');
 
-  const shellOption = { shell: 'C:/Program Files/Git/bin/sh.exe', windowsHide: true, silent: true }
+  const shellOption = { cwd: envFolder, shell: 'C:/Program Files/Git/bin/sh.exe', windowsHide: true, silent: false }
   // const pathFileName = 'D:/YOUTUBE-NNT/0YOUUTBE-bat-dau-ban-thuong-bay-cai-the-nhan-vat/107727-tap-26-chuong-598---chuong-624.ps1'
   // const slugFileName = '107727-tap-26-chuong-598---chuong-624'
   const brandFileName = md5(slugFileName)
@@ -22,7 +25,13 @@ const uploadToGit= (pathFileName, slugFileName) => {
     res.isDirectory = fs.lstatSync(pathFileName).isDirectory()
     res.isFile = fs.lstatSync(pathFileName).isFile()
   }
-  var ckBrFiName = shell.exec(`git checkout -b ${brandFileName}`, shellOption)
+  shell.exec(`rm -rf ${gitFolder}`, shellOption)
+  const isGitClone = shell.exec(`git clone ${gitSource}`, shellOption).code === 0
+  setStatus(isGitClone, 'isGitClone')
+  if (isGitClone) {
+    shellOption.cwd = path.join(envFolder, gitFolder)
+  }
+  var ckBrFiName = isGitClone && shell.exec(`git checkout -b ${brandFileName}`, shellOption)
   setStatus(!ckBrFiName.code, 'ckBrFiName')
   if (ckBrFiName.code !== 0) {
     ckBrFiName = shell.exec(`git checkout ${brandFileName}`, shellOption)
@@ -32,7 +41,7 @@ const uploadToGit= (pathFileName, slugFileName) => {
   if (ckBrFiName.code === 0) {
     let isCurrentCorrectBrand = shell.exec('git status', shellOption).stdout.includes(`On branch ${brandFileName}`)
     setStatus(isCurrentCorrectBrand, 'isCurrentCorrectBrand')
-    const isCopy = isCurrentCorrectBrand && shell.cp('-r', pathFileName, slugFileName).code === 0
+    const isCopy = isCurrentCorrectBrand && shell.exec(`cp -r ${pathFileName} ${slugFileName}`, shellOption).code === 0
     setStatus(isCopy, 'isCopy')
 
     const gitAddObject = isCopy && shell.exec(`git add ./${slugFileName}`, shellOption)
@@ -55,11 +64,15 @@ const uploadToGit= (pathFileName, slugFileName) => {
     isCurrentCorrectBrand = isCurrentCorrectBrand && shell.exec('git checkout main', shellOption).code === 0
     setStatus(isCurrentCorrectBrand, 'isCurrentCorrectBrand')
     if (hasValidateFile) {
-      console.warn('please move https://github.com/nhuyk56/SyncStorage/raw/ to ENV')
-      res.url = `https://github.com/nhuyk56/SyncStorage/raw/${md5(slugFileName)}/${slugFileName}`
+      res.url = `${gitPath}/raw/${md5(slugFileName)}/${slugFileName}`
       res.code = true
     }
   }
+  if (isGitClone) {
+    shellOption.cwd = envFolder
+  }
+  const isRemoveFolder = isGitClone && shell.exec(`rm -rf ${gitFolder}`, shellOption).code === 0
+  setStatus(isRemoveFolder, 'isRemoveFolder')
   return res
 }
 
