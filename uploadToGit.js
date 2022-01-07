@@ -29,9 +29,9 @@ const uploadToGit= (pathFileName, slugFileName) => {
     setStatus(isCurrentCorrectBrand, 'isCurrentCorrectBrand')
     const isCopy = isCurrentCorrectBrand && shell.cp('-r', pathFileName, slugFileName).code === 0
     setStatus(isCopy, 'isCopy')
-    const isGitAdd = isCopy && shell.exec(`git add ./${slugFileName}`, shellOption).code === 0
+    const isGitAdd = isCopy && shell.exec(`git add "./${slugFileName}"`, shellOption).code === 0
     setStatus(isGitAdd, 'isGitAdd')
-    const isGitCommit = isGitAdd && shell.exec(`git commit -m ${slugFileName}`, shellOption).code === 0
+    const isGitCommit = isGitAdd && shell.exec(`git commit -m "${slugFileName}"`, shellOption).code === 0
     setStatus(isGitCommit, 'isGitCommit')
     const isGitPush = isGitCommit && shell.exec(`eval "$(ssh-agent -s)"
                         ssh-add ~/.ssh/nhuyk56
