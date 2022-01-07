@@ -44,7 +44,8 @@ const uploadToGit= (pathFileName, slugFileName) => {
     setStatus(isCurrentCorrectBrand, 'isCurrentCorrectBrand')
     isCurrentCorrectBrand = isCurrentCorrectBrand && shell.exec('git checkout main', shellOption).code === 0
     setStatus(isCurrentCorrectBrand, 'isCurrentCorrectBrand')
-    if (isGitPush) {
+    const hasValidateFile =  shell.exec(`git checkout ${slugFileName}`).code === 0
+    if (hasValidateFile) {
       console.warn('please move https://github.com/nhuyk56/SyncStorage/raw/ to ENV')
       res.url = `https://github.com/nhuyk56/SyncStorage/raw/${md5(slugFileName)}/${slugFileName}`
       res.code = true
