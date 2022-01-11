@@ -13,3 +13,15 @@ const u2g = () => {
   console.log(data)
 }
 u2g()
+
+/*
+  mkdir {folderName}
+  @todo: copy file/ make hsl file/...
+  git init
+  git remote add origin {git@alias-git-storage:nhuyk56/SyncStorage1.git}
+  git checkout -b {newBrandName}
+  git add .
+  git commit -m "{newBrandName}"
+  git push --set-upstream origin {newBrandName}
+  @todo: verify để sure file đã lên github
+*/
