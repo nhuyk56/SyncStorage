@@ -12,10 +12,10 @@ const regexMatchContent = (regex, html) => {
   }
   return res
 }
-const getShellOption = (cwd) => ({ cwd: cwd, shell: 'C:/Program Files/Git/bin/sh.exe', windowsHide: true, silent: false })
+const getShellOption = (cwd) => ({ cwd: cwd, shell: 'C:/Program Files/Git/bin/sh.exe', windowsHide: true, silent: true })
 const getRawMediaLink = (gitSSH, ID) => {
   const regexGit = /@(.*?)----|:(.*?).git/gm
-  const [host, gitOwner_gitName] = regexMatchContent(regexGit, gitSSH).filter(a => a && !(/\@|(\.git)+/.test(a))).join('/')
+  const [host, gitOwner_gitName] = regexMatchContent(regexGit, gitSSH).filter(a => a && !(/\@|(\.git)+/.test(a)))
   if (host === 'github.com') {
     return `https://${host}/${gitOwner_gitName}/raw/${ID}/index.m3u8`
   }
