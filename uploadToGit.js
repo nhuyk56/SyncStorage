@@ -3,18 +3,23 @@ const path = require('path')
 const shell = require('shelljs')
 const md5 = require('md5')
 /*********************************************************************************************************************/
+const regexMatchContent = (regex, html) => {
+  const res = []
+  let m
+  while ((m = regex.exec(html)) !== null) {
+    if (m.index === regex.lastIndex) regex.lastIndex++
+    m.forEach((match, groupIndex) => res.push(match))
+  }
+  return res
+}
 const getShellOption = (cwd) => ({ cwd: cwd, shell: 'C:/Program Files/Git/bin/sh.exe', windowsHide: true, silent: false })
 const getRawMediaLink = (gitSSH, ID) => {
-  const gitSSHSplit = gitSSH.split(':')
-  const gitHost = 'https://' +
-                  gitSSHSplit
-                    .pop() // git@github.com----nhuyk56
-                    .replace('git@', '') // github.com----nhuyk56
-                    .split('----')[0]
-  const gitOwner = gitSSHSplit
-                    .pop() // aaaa/bbbb.git
-                    .replace('.git', '') // aaaa/bbbb
-  return `${gitHost}/${gitOwner}/raw/${ID}/index.m3u8`
+  const regexGit = /@(.*?)----|:(.*?).git/gm
+  const [host, gitOwner_gitName] = regexMatchContent(regexGit, gitSSH).filter(a => a && !(/\@|(\.git)+/.test(a))).join('/')
+  if (host === 'github.com') {
+    return `https://${host}/${gitOwner_gitName}/raw/${ID}/index.m3u8`
+  }
+  return 'MISS FORMAT' + host + gitOwner_gitName
 }
 /*********************************************************************************************************************/
 const renderUploadMediaToGit = ({ cwd, gitSSH, mp3Path }) => {
