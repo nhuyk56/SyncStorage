@@ -31,9 +31,6 @@ const renderUploadMediaToGit = ({ cwd, gitSSH, mp3Path }) => {
   const newCwd = path.join(cwd, ID)
   var res = { code: false }
 
-  /** STATUS */
-  let times = 0
-  const intervalID = setInterval(console.log(`${mp3FileName} process: ${++times}%`), 5000)
   /** REMOVE FOLDER (ID) & MAKE FOLDER (ID) **/
   shell.exec(`rm -rf ${ID}`, getShellOption(cwd))
   const isMkdir = shell.exec(`mkdir ${ID}`, getShellOption(cwd))
@@ -56,7 +53,6 @@ const renderUploadMediaToGit = ({ cwd, gitSSH, mp3Path }) => {
     }
   }
   shell.exec(`rm -rf ${ID}`, getShellOption(cwd))
-  clearInterval(intervalID)
   return res
 }
 
