@@ -31,28 +31,38 @@ const renderUploadMediaToGit = ({ cwd, gitSSH, mp3Path }) => {
   const newCwd = path.join(cwd, ID)
   var res = { code: false }
 
+  /** STATUS REPORT **/
+  var times = 0
+  console.time('PROCESS')
+  const statusReport = (mgs = '') => {
+    console.timeLog('PROCESS', `[${++times}/13]${mgs}: ${mp3FileName} `)
+    return ''
+  }
+
   /** REMOVE FOLDER (ID) & MAKE FOLDER (ID) **/
-  shell.exec(`rm -rf ${ID}`, getShellOption(cwd))
-  const isMkdir = shell.exec(`mkdir ${ID}`, getShellOption(cwd))
+  shell.exec(statusReport() + `rm -rf ${ID}`, getShellOption(cwd))
+  const isMkdir = shell.exec(statusReport() + `mkdir ${ID}`, getShellOption(cwd))
   if (isMkdir.code === 0) {
-    const processFile = shell.exec(`ffmpeg -i "${mp3Path}" -codec: copy -start_number 0 -hls_time 5 -hls_list_size 0 -f hls index.m3u8`, getShellOption(newCwd))
+    const processFile = shell.exec(statusReport() + `ffmpeg -i "${mp3Path}" -codec: copy -start_number 0 -hls_time 5 -hls_list_size 0 -f hls index.m3u8`, getShellOption(newCwd))
     if (processFile.code === 0) {
       /** Git Session */
-      shell.exec(`git init`, getShellOption(newCwd))
-      shell.exec(`git remote add origin ${gitSSH}`, getShellOption(newCwd))
-      shell.exec(`git checkout -b ${ID}`, getShellOption(newCwd))
-      shell.exec(`git add .`, getShellOption(newCwd))
-      shell.exec(`git commit -m "${ID}"`, getShellOption(newCwd))
-      shell.exec(`git push --set-upstream origin ${ID}`, getShellOption(newCwd))
+      shell.exec(statusReport() + `git init`, getShellOption(newCwd))
+      shell.exec(statusReport() + `git remote add origin ${gitSSH}`, getShellOption(newCwd))
+      shell.exec(statusReport() + `git checkout -b ${ID}`, getShellOption(newCwd))
+      shell.exec(statusReport() + `git add .`, getShellOption(newCwd))
+      shell.exec(statusReport() + `git commit -m "${ID}"`, getShellOption(newCwd))
+      shell.exec(statusReport() + `git push --set-upstream origin ${ID}`, getShellOption(newCwd))
       /** verify File Online*/
-      shell.exec(`rm -rf index.m3u8`, getShellOption(newCwd))
-      const verifyFile = shell.exec(`git checkout index.m3u8`, getShellOption(newCwd))
+      shell.exec(statusReport() + `rm -rf index.m3u8`, getShellOption(newCwd))
+      const verifyFile = shell.exec(statusReport() + `git checkout index.m3u8`, getShellOption(newCwd))
       if (verifyFile.code === 0) {
         res = { url: getRawMediaLink(gitSSH, ID), code: true }
       }
     }
   }
-  shell.exec(`rm -rf ${ID}`, getShellOption(cwd))
+  shell.exec(statusReport() + `rm -rf ${ID}`, getShellOption(cwd))
+  statusReport(res.code ? '[SUCCESS]' : '[FAILED]')
+  console.timeEnd('PROCESS')
   return res
 }
 

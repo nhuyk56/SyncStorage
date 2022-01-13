@@ -1,7 +1,7 @@
 var { renderUploadMediaToGit, mp3ToHls } = require('./uploadToGit.js');
 const u2g = () => {
   const mp3Path = 'C:/Users/YNN/Desktop/SyncStorage/case/dai-nguy-doc-sach-nguoi-tap-1.mp3'
-  const cwd = 'C:/Users/YNN/Downloads'
+  const cwd = 'C:/Users/YNN/AppData/Local/Temp'
   const gitSSH = 'git@github.com----nhuyk56:nhuyk56/SyncStorage1.git'
   const data = renderUploadMediaToGit({ cwd, gitSSH, mp3Path })
   console.log(data)
