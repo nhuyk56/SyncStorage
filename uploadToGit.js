@@ -66,20 +66,4 @@ const renderUploadMediaToGit = ({ cwd, gitSSH, mp3Path }) => {
   return res
 }
 
-const test = () => {
-  var shell = require('shelljs');
-  shell.exec(`git status`)
-}
-
-module.exports = {
-  renderUploadMediaToGit,
-  test
-}
-// folder
-// file
-// result
-// error
-// fix
-// multiple
-// ffmpeg -i dai-nguy-doc-sach-nguoi-tap-1.mp3 -profile:v baseline -level 3.0 -start_number 0 -hls_time 180 -hls_list_size 0 -f hls index.m3u
-// ffmpeg -i dai-nguy-doc-sach-nguoi-tap-1.mp3 -codec: copy -start_number 0 -hls_time 5 -hls_list_size 0 -f hls index.m3u8
+module.exports = {  renderUploadMediaToGit }
