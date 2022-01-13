@@ -19,7 +19,7 @@ const getRawMediaLink = (gitSSH, ID) => {
   if (host === 'github.com') {
     return `https://${host}/${gitOwner_gitName}/raw/${ID}/index.m3u8`
   }
-  return 'MISS FORMAT' + host + gitOwner_gitName
+  return '[MissFormat]' + host + gitOwner_gitName
 }
 /*********************************************************************************************************************/
 const renderUploadMediaToGit = ({ cwd, gitSSH, mp3Path }) => {
@@ -30,6 +30,12 @@ const renderUploadMediaToGit = ({ cwd, gitSSH, mp3Path }) => {
   const ID = md5(mp3FileName + currentTime) /** cũng là folder Name chứa git */
   const newCwd = path.join(cwd, ID)
   var res = { code: false }
+
+  /** Verify Git Host **/
+  const url = getRawMediaLink(gitSSH, ID)
+  if (url.includes('[MissFormat]')) {
+    throw new Error(url)
+  }
 
   /** STATUS REPORT **/
   var times = 0
