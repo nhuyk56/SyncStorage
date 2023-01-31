@@ -35,4 +35,4 @@ console.log(`https://github.com/nhuyk56/SyncStorage/raw/${md5(slugFileName)}/${s
 // result
 // error
 // fix
-// multiple
+// multiple1
